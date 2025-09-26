@@ -30,6 +30,13 @@ loginForm.addEventListener('submit', async (e) => {
     const password = loginForm['password'].value;
     errorMessage.textContent = '';
 
+    // ✅ Validación de dominio
+    const allowedDomain = "@lagrimasdelsur.cl";
+    if (!email.endsWith(allowedDomain)) {
+        errorMessage.textContent = `Solo se permiten correos con dominio ${allowedDomain}`;
+        return; // Sale del submit y no intenta autenticar
+    }
+
     try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
@@ -42,9 +49,6 @@ loginForm.addEventListener('submit', async (e) => {
             switch (role) {
                 case 'admin':
                     window.location.href = './dashboard/admin.html';
-                    break;
-                case 'rrhh':
-                    window.location.href = './dashboard/rrhh.html';
                     break;
                 case 'trabajador':
                     window.location.href = './dashboard/trabajador.html';
