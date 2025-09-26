@@ -30,11 +30,11 @@ loginForm.addEventListener('submit', async (e) => {
     const password = loginForm['password'].value;
     errorMessage.textContent = '';
 
-    // ✅ Validación de dominio
+    // ✅ Validación de dominio (sin cambios)
     const allowedDomain = "@lagrimasdelsur.cl";
     if (!email.endsWith(allowedDomain)) {
         errorMessage.textContent = `Solo se permiten correos con dominio ${allowedDomain}`;
-        return; // Sale del submit y no intenta autenticar
+        return; 
     }
 
     try {
@@ -45,18 +45,30 @@ loginForm.addEventListener('submit', async (e) => {
         const userDoc = await getDoc(userDocRef);
 
         if (userDoc.exists()) {
-            const role = userDoc.data().role;
-            switch (role) {
-                case 'admin':
-                    window.location.href = './dashboard/admin.html';
-                    break;
-                case 'trabajador':
-                    window.location.href = './dashboard/trabajador.html';
-                    break;
-                default:
-                    errorMessage.textContent = 'Rol no asignado.';
-                    signOut(auth);
+            const userData = userDoc.data(); // Obtenemos todos los datos del usuario
+            const role = userData.role;
+
+            // --- INICIO DE LA MODIFICACIÓN ---
+            // Verificamos si es un trabajador que necesita cambiar su contraseña
+            if (role === 'trabajador' && userData.requiresPasswordChange === true) {
+                // Si es así, lo redirigimos a la página de cambio de contraseña
+                window.location.href = 'cambiar-password.html';
+            } else {
+                // Si no, procedemos con la redirección normal según su rol
+                switch (role) {
+                    case 'admin':
+                        window.location.href = './dashboard/admin.html';
+                        break;
+                    case 'trabajador':
+                        window.location.href = './dashboard/trabajador.html';
+                        break;
+                    default:
+                        errorMessage.textContent = 'Rol no asignado.';
+                        signOut(auth);
+                }
             }
+            // --- FIN DE LA MODIFICACIÓN ---
+
         } else {
             errorMessage.textContent = 'Error en los datos de usuario.';
             signOut(auth);

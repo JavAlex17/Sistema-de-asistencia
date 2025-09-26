@@ -1,10 +1,65 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Administrador</title>
+    <link rel="stylesheet" href="../style.css"> <style>
+        body { display: block; height: auto; align-items: normal; }
+        .container { max-width: 900px; margin: 2rem auto; padding: 2rem; background-color: #fff; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        table { width: 100%; border-collapse: collapse; margin-top: 1.5rem; }
+        th, td { padding: 0.75rem; border-bottom: 1px solid #ddd; text-align: left; }
+        th { background-color: #f7f7f7; }
+        .actions button { margin-right: 5px; padding: 5px 10px; cursor: pointer; border: 1px solid #ccc; border-radius: 4px; }
+        .actions button.edit { background-color: #ffc107; }
+        .actions button.deactivate { background-color: #dc3545; color: white; }
+        .actions button:disabled { background-color: #e9ecef; cursor: not-allowed; }
+        #logout-button { background-color: #6c757d; float: right; }
+    </style>
 </head>
 <body>
-    <h1>Bienvenido, Administrador</h1>
-    <p>Aquí gestionarás todos los usuarios del sistema.</p>
+    <div class="container">
+        <button id="logout-button">Cerrar Sesión</button>
+        <h1>Panel de Administrador</h1>
+        <p>Gestión de usuarios del sistema.</p>
+
+        <form id="user-form" class="login-form" style="text-align: left; margin-top: 2rem;">
+            <h2 id="form-title">Agregar Nuevo Usuario</h2>
+            <input type="hidden" id="user-id"> <div class="input-group">
+                <label for="user-email">Correo Electrónico</label>
+                <input type="email" id="user-email" required>
+            </div>
+            <div class="input-group">
+                <label for="user-password">Contraseña (dejar en blanco para no cambiar)</label>
+                <input type="password" id="user-password">
+            </div>
+            <div class="input-group">
+                <label for="user-role">Rol</label>
+                <select id="user-role" required>
+                    <option value="trabajador">Trabajador</option>
+                    <option value="admin">Administrador</option>
+                </select>
+            </div>
+            <button type="submit" id="form-submit-button">Agregar Usuario</button>
+            <button type="button" id="form-cancel-button" style="display: none; background-color: #6c757d;">Cancelar Edición</button>
+        </form>
+
+        <hr style="margin: 2rem 0;">
+        <h2>Lista de Usuarios</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Correo</th>
+                    <th>Rol</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="user-list">
+                </tbody>
+        </table>
+    </div>
+
+    <script type="module" src="../admin.js"></script>
 </body>
 </html>
