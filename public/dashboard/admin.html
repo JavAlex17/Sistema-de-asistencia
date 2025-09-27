@@ -218,10 +218,22 @@
 
     <main class="main-content">
         <section id="asistencia" class="content-section">
-            <div class="container container-padding">
-                <h1>Mi Asistencia</h1>
-                <p>Esta sección mostrará los registros de asistencia del administrador.</p>
-                </div>
+        <div class="container container-padding">
+            <h1>Mi Asistencia</h1>
+            <p>Esta sección mostrará los registros de asistencia del administrador.</p>
+
+            <hr>
+
+            <!-- Bloque para probar addAdminRole -->
+            <h2>Asignar rol de Administrador</h2>
+            <div>
+            <label for="adminEmail">Correo del usuario:</label>
+            <input type="email" id="adminEmail" placeholder="correo@dominio.com" required>
+            <button id="makeAdminBtn">Hacer Admin</button>
+            </div>
+
+            <pre id="makeAdminOutput"></pre>
+        </div>
         </section>
 
         <section id="usuarios" class="content-section active">

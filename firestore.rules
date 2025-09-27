@@ -4,15 +4,18 @@ service cloud.firestore {
 
     // Regla para la colección "users"
     match /users/{userId} {
-      // Permisos para leer o escribir un DOCUMENTO ESPECÍFICO
-      allow read: if request.auth.uid == userId || request.auth.token.role == 'admin';
-      allow write: if request.auth.token.role == 'admin';
-    }
+      // Un usuario puede leer su propio documento.
+      // Un administrador (verificado en la DB) también puede leer cualquier documento de usuario.
+      allow read: if request.auth.uid == userId || get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
 
-    // ¡NUEVA REGLA!
-    // Permiso para leer la LISTA COMPLETA de la colección
+      // Solo un admin (verificado en la DB) puede escribir en cualquier documento de usuario.
+      allow write: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Regla para LISTAR la colección "users"
     match /users {
-        allow list: if request.auth.token.role == 'admin';
+      // Permite listar si el documento del solicitante en la DB tiene el rol de "admin".
+      allow list: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
     }
   }
 }
